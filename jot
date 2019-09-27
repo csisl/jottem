@@ -4,9 +4,6 @@
 # with the same tty name
 check_notes_exists () {
 
-	tty=$( basename $( tty ) )
-	filename=jottem_$tty.txt 
-
 	if [ -f /tmp/$filename ]; then 
 		echo "[!] notes for a terminal session #$tty already exists [ /tmp/$filename ]"	
 		echo "You can either continue editing (e), archive (a), or delete (d) these notes."
@@ -49,7 +46,7 @@ archive_notes () {
 	archive_dir="$HOME/.jottem_archive"
 	mkdir -p $archive_dir
 	echo "[!] archiving notes in $archive_dir"
-	date=$( date '+%Y%m%d' )
+	local date=$( date '+%Y%m%d' )
 	mv /tmp/$filename $archive_dir/jottem_$tty_$date
 	add_notes
 
@@ -59,6 +56,9 @@ edit_notes() {
 	
 	# append notes to existing noteboook
 	echo "appending notes to $filename"
+	echo "---"
+	cat /tmp/$filename
+	echo "---"
 	jot_notes
 
 }
@@ -73,6 +73,7 @@ add_notes () {
 
 }
 
+
 jot_notes(){
 
 	echo "" >> /tmp/$filename
@@ -84,9 +85,27 @@ jot_notes(){
 	
 }
 
+
+view_notes(){
+	
+	file=$1
+	echo "Notes for $file"
+	cat /tmp/$file
+
+}
+
 main () {
-	check_notes_exists
+
+	tty=$( basename $( tty ) )
+	filename=jottem_$tty.txt 
+
+	if [ "$1" == "--view" ] && [ -f /tmp/$filename ]; then 
+		view_notes $filename
+	else
+		check_notes_exists
+	fi
+
 }
 
 
-main
+main $1
