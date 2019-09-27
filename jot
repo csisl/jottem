@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# check to see if notes already exist for a terminal session
+# with the same tty name
+check_notes_exists () {
+
+	tty=$( basename $( tty ) )
+	filename=jottem_$tty.txt 
+
+	if [ -f /tmp/$filename ]; then 
+		echo "[!] notes for a terminal session #$tty already exists [ /tmp/$filename ]"	
+		echo "You can either continue editing (e), archive (a), or delete (d) these notes."
+		read -p "Which would you like to do? [e/a/d] " choice
+		eval_choice $choice 
+	else
+		# if no notes exist for the current terminal session, just create new ones 
+		add_notes $filename
+	fi
+
+}
+
+eval_choice(){
+
+	# if notes already exist for the current terminal session either delete 
+	# the notes and begin creating new ones or archive them 
+	if [ "$1" == "a" ]; then 
+		archive_notes
+	elif [ "$1" == "d" ]; then 
+		delete_notes
+	elif [ "$1" == "e" ]; then 
+		edit_notes
+	else 
+		echo "unrecognized response: $1"
+		exit 1
+	fi
+		
+}
+
+delete_notes () {
+
+	echo "deleting notes: /tmp/$filename"
+	rm /tmp/$filename
+
+}
+
+
+archive_notes () {
+
+	archive_dir="$HOME/.jottem_archive"
+	mkdir -p $archive_dir
+	echo "[!] archiving notes in $archive_dir"
+	date=$( date '+%Y%m%d' )
+	mv /tmp/$filename $archive_dir/jottem_$tty_$date
+	add_notes
+
+}
+
+edit_notes() {
+	
+	# append notes to existing noteboook
+	echo "appending notes to $filename"
+	jot_notes
+
+}
+
+
+add_notes () {
+
+	echo "[!] adding notes to /tmp/$filename"
+	echo "(press enter twice when done)"
+	echo "NOTES:"
+	jot_notes
+
+}
+
+jot_notes(){
+
+	echo "" >> /tmp/$filename
+	date >> /tmp/$filename
+	while read line; do
+		[ -z "$line" ] && break
+		echo "$line" >> /tmp/$filename
+	done
+	
+}
+
+main () {
+	check_notes_exists
+}
+
+
+main
