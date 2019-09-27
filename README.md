@@ -4,7 +4,7 @@ jottem is a tool used to keep track of terminal sessions by creating temporary n
 
 ### installation
 
-Simply put `jot` on your path (such as moving to `/usr/bin`) and run 
+Simply put the `jot` script on your path (such as moving to `/usr/bin`) and run 
 
 `$ jot` 
 
@@ -21,8 +21,19 @@ If this is either an existing session or a session with a repeat number (which i
 3. delete the notes and start fresh like crisp autumn air 
 
 
+### usage 
+
+Either simply run 
+
+`$ jot`
+
+or, if you'd like to view notes for an existing session run 
+
+`$ jot --view`
+
 ### TODO 
 
 account for more possibilities such as:
 * you create multiple terminal sessions in one day and want to archive multiple notes (right now it overwrites the archived notes)
+* add help message 
 * ?
