@@ -99,8 +99,12 @@ main () {
 	tty=$( basename $( tty ) )
 	filename=jottem_$tty.txt 
 
-	if [ "$1" == "--view" ] && [ -f /tmp/$filename ]; then 
-		view_notes $filename
+	if [ "$1" == "--view" ]; then 
+		if [ -f /tmp/$filename ]; then
+			view_notes $filename
+		else 
+			echo "No notes exist for $tty"
+		fi
 	else
 		check_notes_exists
 	fi
