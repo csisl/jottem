@@ -1,5 +1,7 @@
 # jottem
 
+![](https://github.com/csisl/jottem/blob/master/jottem.png)
+
 jottem is a tool used to keep track of terminal sessions by creating temporary notes corresponding to a terminal specific session for those who either have a lot of thoughts running through their mind at any given time or just a lot of terminals/tmux sessions open
 
 ### installation
